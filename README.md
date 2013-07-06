@@ -12,7 +12,8 @@ e depois adicione os arquivos modificados com o comando
 e para fazer commit use o comando 
     git commit -a -m "Mensagem obrigatoria falando sobre as alteracoes feitas"
 Tudo que foi feito até agora está localmente na sua máquina, para fazer upload no servidor use
-    git push
+    git push https://github.com/JpOnline/miniUno
+e basta colocar seu login e senha do github.
 
 A qualquer momento use
     git status 
