@@ -16,12 +16,21 @@ FPS = 30
 # Color constants.
 RED = (255, 0, 0, 255)
 GREEN = (0, 255, 0, 255)
+VERDE = 0
+AMARELO = 1
+VERMELHO = 2
+AZUL = 3
+
+# Imagem das cartas
+cardsImage = pygame.image.load("cards.jpg")
+card1 = cardsImage
 
 def main():
     pygame.init()
 
     # Set the screen size.
     screen = pygame.display.set_mode((480, 800))
+
 
     # Map the back button to the escape key.
     if android:
@@ -43,9 +52,13 @@ def main():
             if android.check_pause():
                 android.wait_for_resume()
 
+
         # Draw the screen based on the timer.
         if ev.type == TIMEREVENT:
             screen.fill(color)
+	    #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi, pixelsNaVerticalAPartirDeYi)
+	    card1 = cardsImage.subsurface(355.5,0,44.44,68.16)
+	    screen.blit(card1, (0,0))
             pygame.display.flip()
 
         # When the touchscreen is pressed, change the color to green.
