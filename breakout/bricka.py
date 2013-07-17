@@ -6,14 +6,15 @@
 """
 import sys
 import pygame
+import math
 
 SCREEN_SIZE   = 640,480
 
 # Object dimensions
 BRICK_WIDTH   = 60
 BRICK_HEIGHT  = 15
-PADDLE_WIDTH  = 60
-PADDLE_HEIGHT = 12
+PADDLE_WIDTH  = 80
+PADDLE_HEIGHT = 10
 BALL_DIAMETER = 16
 BALL_RADIUS   = BALL_DIAMETER / 2
 
@@ -22,7 +23,7 @@ MAX_BALL_X   = SCREEN_SIZE[0] - BALL_DIAMETER
 MAX_BALL_Y   = SCREEN_SIZE[1] - BALL_DIAMETER
 
 # Paddle Y coordinate
-PADDLE_Y = SCREEN_SIZE[1] - PADDLE_HEIGHT - 10
+PADDLE_Y = SCREEN_SIZE[1] - PADDLE_HEIGHT - 30
 
 # Color constants
 BLACK = (0,0,0)
@@ -85,21 +86,26 @@ class Bricka:
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_LEFT]:
-            self.paddle.left -= 5
+            self.paddle.left -= 10
             if self.paddle.left < 0:
                 self.paddle.left = 0
 
         if keys[pygame.K_RIGHT]:
-            self.paddle.left += 5
+            self.paddle.left += 10
             if self.paddle.left > MAX_PADDLE_X:
                 self.paddle.left = MAX_PADDLE_X
+		
+		if keys[pygame.K_ESCAPE]:
+			event.type = pygame.QUIT
 
         if keys[pygame.K_SPACE] and self.state == STATE_BALL_IN_PADDLE:
             self.ball_vel = [5,-5]
             self.state = STATE_PLAYING
         elif keys[pygame.K_RETURN] and (self.state == STATE_GAME_OVER or self.state == STATE_WON):
             self.init_game()
+		
 
+			
     def move_ball(self):
         self.ball.left += self.ball_vel[0]
         self.ball.top  += self.ball_vel[1]
@@ -132,6 +138,11 @@ class Bricka:
         if self.ball.colliderect(self.paddle):
             self.ball.top = PADDLE_Y - BALL_DIAMETER
             self.ball_vel[1] = -self.ball_vel[1]
+            if self.ball.left < self.paddle.left + PADDLE_WIDTH / 2 :
+                self.ball_vel[0] = -5 * math.fabs(self.paddle.left + PADDLE_WIDTH / 2 - self.ball.left)/100
+            else:
+                self.ball_vel[0] =  5 * math.fabs(self.paddle.left - self.ball.left)/100
+			
         elif self.ball.top > self.paddle.top:
             self.lives -= 1
             if self.lives > 0:
@@ -157,7 +168,7 @@ class Bricka:
         while 1:            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit
+                    sys.exit()
 
             self.clock.tick(50)
             self.screen.fill(BLACK)
