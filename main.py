@@ -126,7 +126,7 @@ def main():
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
-            color = (0, 0, 0, 255) 
+            color = GREEN
 
         # When it's released, change the color to RED.
         elif ev.type == pygame.MOUSEBUTTONUP:
