@@ -1,59 +1,67 @@
-# Copyright (C) 2009 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not
-# use this file except in compliance with the License. You may obtain a copy of
-# the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under
-# the License.
+#!/usr/bin/env python2.7
 
-__author__ = 'Damon Kohler <damonkohler@gmail.com>'
-
-import collections
-import json
-import os
-import socket
 import sys
+sys.path.insert(0, 'buildlib/jinja2.egg')
+sys.path.insert(0, 'buildlib')
 
-PORT = os.environ.get('AP_PORT')
-HOST = os.environ.get('AP_HOST')
-HANDSHAKE = os.environ.get('AP_HANDSHAKE')
-Result = collections.namedtuple('Result', 'id,result,error')
+import os
+import argparse
+import subprocess
 
+import interface
+import install_sdk
+import configure
+import build
+import plat
 
-class Android(object):
+def main():
 
-  def __init__(self, addr=None):
-    if addr is None:
-      addr = HOST, PORT
-    self.conn = socket.create_connection(addr)
-    self.client = self.conn.makefile()
-    self.id = 0
-    if HANDSHAKE is not None:
-      self._authenticate(HANDSHAKE)
+    # Change into our root directory.
+    ROOT = os.path.abspath(os.path.dirname(sys.argv[0]))
+    os.chdir(ROOT)
 
-  def _rpc(self, method, *args):
-    data = {'id': self.id,
-            'method': method,
-            'params': args}
-    request = json.dumps(data)
-    self.client.write(request+'\n')
-    self.client.flush()
-    response = self.client.readline()
-    self.id += 1
-    result = json.loads(response)
-    if result['error'] is not None:
-      print result['error']
-    # namedtuple doesn't work with unicode keys.
-    return Result(id=result['id'], result=result['result'],
-                  error=result['error'], )
+    # Parse the arguments.
+    ap = argparse.ArgumentParser(description="Build an android package.")
+    ap.add_argument("command", help="The command to run. One of install_sdk, configure, or build.")
+    ap.add_argument("argument", nargs='*', help="The arguments to the selected command.")
+    
+    args = ap.parse_args()
 
-  def __getattr__(self, name):
-    def rpc_call(*args):
-      return self._rpc(name, *args)
-    return rpc_call
+    iface = interface.Interface()
+    
+    def check_args(n):
+        if len(args.argument) != n:
+            iface.fail("The {} command expects {} arguments.".format(args.command, n))
+            
+        return args.argument
+    
+    if args.command == "installsdk":
+        check_args(0)
+        install_sdk.install_sdk(iface)
+        
+    elif args.command == "configure":
+        directory, = check_args(1)
+        configure.configure(iface, directory)
+        
+    elif args.command == "setconfig":
+        directory, var, value = check_args(3)
+        configure.set_config(iface, directory, var, value)
+        
+    elif args.command == "build":
+        if len(args.argument) < 2:
+            iface.fail("The build command expects at least 2 arguments.")
+            
+        build.build(iface, args.argument[0], args.argument[1:])
+
+    elif args.command == "logcat":
+        subprocess.call([ plat.adb, "logcat", "-s", "python:*"] + args.argument)
+
+    elif args.command == "test":
+        iface.success("All systems go!")
+        
+    else:
+        ap.error("Unknown command: " + args.command)
+        
+if __name__ == "__main__":
+    main()
+    

@@ -1,0 +1,1 @@
+{"orientation": "portrait", "include_pil": true, "expansion": false, "icon_name": "mini Uno", "include_sqlite": false, "permissions": ["vibrate"], "layout": "internal", "name": "mini Uno", "package": "com.domain.program", "source": true, "version": "0.1", "numeric_version": "1"}
