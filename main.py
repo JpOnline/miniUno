@@ -36,10 +36,11 @@ class Card:
         self.number = n
         self.pos = None
 
-print 17*TAMANHO_CARTA_X
-print 18*TAMANHO_CARTA_X
-print 5*TAMANHO_CARTA_Y
-print 6*TAMANHO_CARTA_Y
+def isInArea(mouse, card):
+    if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
+        return True
+    else:
+        return False
 
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
@@ -137,7 +138,9 @@ def main():
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
         if pygame.mouse.get_pressed()[0]:
-            cards[5].pos = pygame.mouse.get_pos()
+            for i in xrange(len(cards)-5):
+                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
+                    cards[i].pos = pygame.mouse.get_pos()
 
 # This isn't run on Android.
 if __name__ == "__main__":
