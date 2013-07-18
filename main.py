@@ -114,9 +114,6 @@ def distribui_cartas():
         for j in range(7):
             index = random.randint(0,len(cards)-1)
             player[i].cards.append(cards.pop(index))
-print player[0].cards
-        
-    
 
 def main():
     pygame.init()
