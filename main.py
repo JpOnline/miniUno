@@ -28,6 +28,9 @@ cardsImage = pygame.image.load("cards.jpg")
 TAMANHO_CARTA_X = 44.4
 TAMANHO_CARTA_Y = 68.16
 
+# verifica se dedo esta tocando na tela
+isPressed = False
+
 # Classe carta
 class Card:
     def __init__(self, i, c, n):
@@ -128,10 +131,12 @@ def main():
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
             color = GREEN
+            isPressed = True
 
         # When it's released, change the color to RED.
         elif ev.type == pygame.MOUSEBUTTONUP:
             color = RED
+            isPressed = False
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
@@ -145,3 +150,4 @@ def main():
 # This isn't run on Android.
 if __name__ == "__main__":
     main()
+    #J
