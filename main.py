@@ -69,7 +69,7 @@ def swipeUp(ev):
 
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
-cards = (
+cards = [
 	Card(cardsImage.subsurface(753.1, 340.5, 44.4, 68.16), VERMELHO, 0),
 	Card(cardsImage.subsurface(17*TAMANHO_CARTA_X, 5*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERMELHO, 0),
 	Card(cardsImage.subsurface(17*TAMANHO_CARTA_X, 4*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERMELHO, 1), 
@@ -107,7 +107,7 @@ cards = (
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 2*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 3),
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 1*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 4),
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 0*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 4),
-    )
+    ]
 for i in range(4):
     for j in range(10):
         if i*10+j < 36:
@@ -122,11 +122,10 @@ for i in range (4):
         
 
 #Funcao de distribuicao de cartas
-def distribui_cartas():
-    for i in range (4):
-        for j in range(7):
-            index = random.randint(0,len(cards)-1)
-            player[i].cards.append(cards.pop(index))
+for i in range (4):
+    for j in range(7):
+        index = random.randint(0,len(cards)-1)
+        player[i].cards.append(cards.pop(index))
 
 def main():
     pygame.init()
@@ -169,12 +168,10 @@ def main():
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
-            color = GREEN
             isPressed = True
 
         # When it's released, change the color to RED.
-        elif ev.type == pygame.MOUSEBUTTONUP:
-            color = RED
+        elif ev.type == pygame.MOUSEBUTTONUP:   
             isPressed = False
 
         # When the user hits back, ESCAPE is sent. Handle it and end
@@ -189,6 +186,7 @@ def main():
 #                    cards[i].pos = pygame.mouse.get_pos()
 
 	if swipeUp(ev):
+            print player[0].cards[0].color
 	    if color is RED:
 	        color = GREEN
 	    else:
