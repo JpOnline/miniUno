@@ -47,6 +47,19 @@ def isInArea(mouse, card):
     else:
         return False
 
+def swipeUp(ev):
+    if ev.type == pygame.MOUSEBUTTONDOWN:
+        pInicial = pygame.mouse.get_pos()[1]
+        while ev.type != pygame.MOUSEBUTTONUP:
+            ev = pygame.event.wait()
+        pFinal = pygame.mouse.get_pos()[1]
+        if pFinal < pInicial - 50:
+            return True
+        else:
+            return False
+    else:
+        return False
+
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
 cards = (
@@ -134,24 +147,30 @@ def main():
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
-            color = GREEN
             isPressed = True
 
         # When it's released, change the color to RED.
         elif ev.type == pygame.MOUSEBUTTONUP:
-            color = RED
             isPressed = False
+            print pygame.MOUSEBUTTONDOWN
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
-        if pygame.mouse.get_pressed()[0]:
-            for i in xrange(len(cards)-5):
-                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
-                    cards[i].pos = pygame.mouse.get_pos()
+
+        #movimenta a carta com o dedo
+#        if pygame.mouse.get_pressed()[0]:
+#            for i in xrange(len(cards)-5):
+#                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
+#                    cards[i].pos = pygame.mouse.get_pos()
+
+        if swipeUp(ev):
+            if color is RED:
+                color = GREEN
+            else:
+                color = RED
 
 # This isn't run on Android.
 if __name__ == "__main__":
     main()
-    #J
