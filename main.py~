@@ -54,19 +54,6 @@ def isInArea(mouse, card):
     else:
         return False
 
-def swipeUp(ev):
-    if ev.type == pygame.MOUSEBUTTONDOWN:
-        pInicial = pygame.mouse.get_pos()[1]
-        while ev.type != pygame.MOUSEBUTTONUP:
-            ev = pygame.event.wait()
-        pFinal = pygame.mouse.get_pos()[1]
-        if pFinal < pInicial - 50:
-            return True
-        else:
-            return False
-    else:
-        return False
-
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
 cards = (
@@ -127,6 +114,9 @@ def distribui_cartas():
         for j in range(7):
             index = random.randint(0,len(cards)-1)
             player[i].cards.append(cards.pop(index))
+print player[0].cards
+        
+    
 
 def main():
     pygame.init()
@@ -181,18 +171,10 @@ def main():
         # the game.
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
-	
-	#movimenta carta com o dedo
-#        if pygame.mouse.get_pressed()[0]:
-#            for i in xrange(len(cards)-5):
-#                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
-#                    cards[i].pos = pygame.mouse.get_pos()
-
-	if swipeUp(ev):
-	    if color is RED:
-	        color = GREEN
-	    else:
-	        color = RED
+        if pygame.mouse.get_pressed()[0]:
+            for i in xrange(len(cards)-5):
+                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
+                    cards[i].pos = pygame.mouse.get_pos()
 
 # This isn't run on Android.
 if __name__ == "__main__":
