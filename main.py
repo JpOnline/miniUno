@@ -23,6 +23,8 @@ AZUL = 3
 
 # Imagem das cartas
 cardsImage = pygame.image.load("cards.jpg")
+cardsImage1 = pygame.image.load("cartainv1.jpg")
+cardsImage1.subsurface(10, 10, 10, 10)
 
 # Constantes de tamanho de carta
 TAMANHO_CARTA_X = 44.4
@@ -111,6 +113,8 @@ def main():
 
     while True:
 
+
+        screen.blit(cardsImage1, (200,400))
         for card in cards:
             if card.pos is not None:
                 screen.blit(card.image, card.pos)
