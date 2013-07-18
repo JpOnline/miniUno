@@ -149,9 +149,6 @@ def main():
 
 
         screen.blit(cardsImage1, (200,400))
-        for card in cards:
-            if card.pos is not None:
-                screen.blit(card.image, card.pos)
         pygame.display.flip()
 
     	ev = pygame.event.wait()
