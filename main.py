@@ -1,4 +1,5 @@
 import pygame
+import random
 #ger
 # Import the android module. If we can't import it, set it to None - this
 # lets us test it, and check to see if we want android-specific behavior.
@@ -6,6 +7,7 @@ try:
     import android
 except ImportError:
     android = None
+
 
 # Event constant.
 TIMEREVENT = pygame.USEREVENT
@@ -24,7 +26,6 @@ AZUL = 3
 # Imagem das cartas
 cardsImage = pygame.image.load("cards.jpg")
 cardsImage1 = pygame.image.load("cartainv1.jpg")
-cardsImage1.subsurface(10, 10, 10, 10)
 
 # Constantes de tamanho de carta
 TAMANHO_CARTA_X = 44.4
@@ -41,22 +42,15 @@ class Card:
         self.number = n
         self.pos = None
 
+# Definindo players
+class Player:
+    def __init__(self, vez):
+        self.cards = list()
+        self.myturn = vez
+
 def isInArea(mouse, card):
     if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
         return True
-    else:
-        return False
-
-def swipeUp(ev):
-    if ev.type == pygame.MOUSEBUTTONDOWN:
-        pInicial = pygame.mouse.get_pos()[1]
-        while ev.type != pygame.MOUSEBUTTONUP:
-            ev = pygame.event.wait()
-        pFinal = pygame.mouse.get_pos()[1]
-        if pFinal < pInicial - 50:
-            return True
-        else:
-            return False
     else:
         return False
 
@@ -106,6 +100,24 @@ for i in range(4):
         if i*10+j < 36:
             cards[i*10+j].pos = (j*TAMANHO_CARTA_X, i*TAMANHO_CARTA_Y)
 
+player = list()
+for i in range (4):
+    if i is 0:
+        player.append(Player(True))
+    else:
+        player.append(Player(False))
+        
+
+#Funcao de distribuicao de cartas
+def distribui_cartas():
+    for i in range (4):
+        for j in range(7):
+            index = random.randint(0,len(cards)-1)
+            player[i].cards.append(cards.pop(index))
+print player[0].cards
+        
+    
+
 def main():
     pygame.init()
 
@@ -147,30 +159,24 @@ def main():
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
+            color = GREEN
             isPressed = True
 
         # When it's released, change the color to RED.
         elif ev.type == pygame.MOUSEBUTTONUP:
+            color = RED
             isPressed = False
-            print pygame.MOUSEBUTTONDOWN
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
-
-        #movimenta a carta com o dedo
-#        if pygame.mouse.get_pressed()[0]:
-#            for i in xrange(len(cards)-5):
-#                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
-#                    cards[i].pos = pygame.mouse.get_pos()
-
-        if swipeUp(ev):
-            if color is RED:
-                color = GREEN
-            else:
-                color = RED
+        if pygame.mouse.get_pressed()[0]:
+            for i in xrange(len(cards)-5):
+                if isInArea(pygame.mouse.get_pos(), cards[i].pos):
+                    cards[i].pos = pygame.mouse.get_pos()
 
 # This isn't run on Android.
 if __name__ == "__main__":
     main()
+    #J
