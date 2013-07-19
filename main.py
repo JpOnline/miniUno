@@ -60,7 +60,7 @@ def swipeUp(ev):
         while ev.type != pygame.MOUSEBUTTONUP:
             ev = pygame.event.wait()
         pFinal = pygame.mouse.get_pos()[1]
-        if pFinal < pInicial - 50:
+        if pFinal < pInicial - 100:
             return True
         else:
             return False
@@ -69,6 +69,7 @@ def swipeUp(ev):
 
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
+#Definicao de lista com todas as cartas
 cards = [
 	Card(cardsImage.subsurface(753.1, 340.5, 44.4, 68.16), VERMELHO, 0),
 	Card(cardsImage.subsurface(17*TAMANHO_CARTA_X, 5*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERMELHO, 0),
