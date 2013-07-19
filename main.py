@@ -1,6 +1,6 @@
 import pygame
 import random
-#ger
+
 # Import the android module. If we can't import it, set it to None - this
 # lets us test it, and check to see if we want android-specific behavior.
 try:
@@ -125,7 +125,7 @@ for i in range (4):
         
 
 #Funcao de distribuicao de cartas
-for i in range (4):
+for i in range (2):
     for j in range(7):
         index = random.randint(0,len(cards)-1)
         player[i].cards.append(cards.pop(index))
@@ -153,9 +153,9 @@ def main():
 
     while True:
         #Desenha tela
-        screen.blit(texto, (400,370))
+        screen.blit(texto, (270,80+TAMANHO_CARTA_Y/2))
         screen.blit(verso, (150,400))
-        screen.blit(pygame.transform.rotate(miniVerso,90), (380, 400))
+        screen.blit(pygame.transform.rotate(miniVerso,180), (240, 80))
         #Posicao das cartas do player
         posicaoCartas = 480/len(player[0].cards)
         for i in xrange(len(player[0].cards)):
