@@ -80,14 +80,18 @@ cards = [
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 0*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 4),
     ]
 
+buyDeck = []
+throwDeck = []
+
+BUYDECK_POS = (260, 300) 
+BUYDECK_WIDTH = 72 
+BUYDECK_HEIGHT = 118
+
 # Event constant.
 TIMEREVENT = pygame.USEREVENT
 
 # The FPS the game runs at.
 FPS = 30
-
-# verifica se dedo esta tocando na tela
-isPressed = False
 
 # Definindo players
 class Player:
@@ -96,8 +100,8 @@ class Player:
         self.myturn = vez
 
 # Retorna True se o clique do mouse esta dentro da area da carta passada
-def isInArea(mouse, card):
-    if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
+def isInArea(mouse, card, width, height):
+    if mouse[0] > card[0] and mouse[0] < card[0]+width and mouse[1] > card[1] and mouse[1] < card[1]+height:
         return True
     else:
         return False
@@ -134,10 +138,32 @@ for i in range(len(player)):
         index = random.randint(0,len(cards)-1)
         player[i].cards.append(cards.pop(index))
 
+#Distribui randomicamente pro monte de compra
+for i in xrange(len(cards)):
+    buyDeck.append(cards.pop(random.randint(0,len(cards)-1)))
+
+def compraCarta():
+    if len(buyDeck) > 0:
+        if isInArea(pygame.mouse.get_pos(), BUYDECK_POS, BUYDECK_WIDTH,BUYDECK_HEIGHT):
+            player[0].cards.append(buyDeck.pop())
+    else:
+        None
+
+def drawThrowDeck(screen):
+    screen.blit(pygame.transform.scale(throwDeck[len(throwDeck)-1].image,
+                                       (BUYDECK_WIDTH, BUYDECK_HEIGHT)),
+                (BUYDECK_POS[0]-BUYDECK_WIDTH-50,BUYDECK_POS[1]))
+
+def drawPlayerCards(screen):
+    posicaoCartas = 480/len(player[0].cards)
+    for i in xrange(len(player[0].cards)):
+        player[0].cards[i].pos = (i*posicaoCartas, 720)
+        screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
+
 def main():
     pygame.init()
 
-    # Set the screen size.
+    # Set the screen size.  
     screen = pygame.display.set_mode((480, 800))
 
     #Definicao de texto
@@ -155,16 +181,16 @@ def main():
     # The color of the screen.
     color = RED
 
+    # Inicializar o monte de descartes
+    throwDeck.append(buyDeck.pop())
+
     while True:
         #Desenha tela
         screen.blit(texto, (285,97))
-        screen.blit(verso, (150,400))
-        screen.blit(pygame.transform.rotate(miniVerso,180), (240, 80))
-        #Posicao das cartas do player
-        posicaoCartas = 480/len(player[0].cards)
-        for i in xrange(len(player[0].cards)):
-            player[0].cards[i].pos = (i*posicaoCartas, 720)
-            screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
+        screen.blit(verso, BUYDECK_POS)
+        screen.blit(miniVerso, (240, 80))
+        drawPlayerCards(screen)
+        drawThrowDeck(screen)
         pygame.display.flip()
 
         #espera por evento
@@ -182,11 +208,12 @@ def main():
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
-            isPressed = True
+            compraCarta()
+
 
         # When it's released, change the color to RED.
         elif ev.type == pygame.MOUSEBUTTONUP:   
-            isPressed = False
+            None
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
@@ -208,7 +235,8 @@ def main():
 
         #Jogar carta
 	if pygame.mouse.get_pressed()[0]:
-            if isInArea(pygame.mouse.get_pos(), player[0].cards[1].pos):
+            if isInArea(pygame.mouse.get_pos(),
+                        player[0].cards[1].pos,TAMANHO_CARTA_X, TAMANHO_CARTA_Y):
                 color = GREEN
             else:
                 color = RED
