@@ -25,7 +25,7 @@ cardsImage = pygame.image.load("cards.jpg")
 verso = pygame.image.load("cartainv1.jpg")
 miniVerso = pygame.transform.scale(verso, (int(0.8*TAMANHO_CARTA_X),
                                    int(0.8*TAMANHO_CARTA_Y)))
-background = pygame.image.load("table.jpg")
+background = pygame.image.load("fundo2.jpg")
 back = pygame.transform.scale(background, (480,800))
 
 # Color constants.
