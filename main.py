@@ -202,6 +202,13 @@ def main():
 	    else:
 	        color = RED
 
+        #Jogar carta
+	if pygame.mouse.get_pressed()[0]:
+            if isInArea(pygame.mouse.get_pos(), player[0].cards[1].pos):
+                color = GREEN
+            else:
+                color = RED
+                
 # This isn't run on Android.
 if __name__ == "__main__":
     main()
