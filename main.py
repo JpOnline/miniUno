@@ -25,8 +25,12 @@ cardsImage = pygame.image.load("cards.jpg")
 verso = pygame.image.load("cartainv1.jpg")
 miniVerso = pygame.transform.scale(verso, (int(0.8*TAMANHO_CARTA_X),
                                    int(0.8*TAMANHO_CARTA_Y)))
+
 background = pygame.image.load("fundo2.jpg")
 back = pygame.transform.scale(background, (480,800))
+
+avatar = pygame.image.load("smile1.gif")
+miniAvatar = pygame.transform.scale(avatar, (60,60))
 
 # Color constants.
 RED = (255, 0, 0, 255)
@@ -190,6 +194,7 @@ def main():
     while True:
         #Desenha tela
         screen.blit(back, (0, 0))
+        screen.blit(miniAvatar, (225, 10))
         screen.blit(texto, (285,97))
         screen.blit(verso, BUYDECK_POS)
         screen.blit(miniVerso, (240, 80))
