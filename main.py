@@ -8,12 +8,17 @@ try:
 except ImportError:
     android = None
 
+# Classe carta
+class Card:
+    def __init__(self, i, c, n):
+        self.image = i
+        self.color = c
+        self.number = n
+        self.pos = None
 
-# Event constant.
-TIMEREVENT = pygame.USEREVENT
-
-# The FPS the game runs at.
-FPS = 30
+# Imagem das cartas
+cardsImage = pygame.image.load("cards.jpg")
+verso = pygame.image.load("cartainv1.jpg")
 
 # Color constants.
 RED = (255, 0, 0, 255)
@@ -23,49 +28,9 @@ AMARELO = 1
 VERMELHO = 2
 AZUL = 3
 
-# Imagem das cartas
-cardsImage = pygame.image.load("cards.jpg")
-cardsImage1 = pygame.image.load("cartainv1.jpg")
-
 # Constantes de tamanho de carta
 TAMANHO_CARTA_X = 44.4
 TAMANHO_CARTA_Y = 68.16
-
-# verifica se dedo esta tocando na tela
-isPressed = False
-
-# Classe carta
-class Card:
-    def __init__(self, i, c, n):
-        self.image = i
-        self.color = c
-        self.number = n
-        self.pos = None
-
-# Definindo players
-class Player:
-    def __init__(self, vez):
-        self.cards = list()
-        self.myturn = vez
-
-def isInArea(mouse, card):
-    if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
-        return True
-    else:
-        return False
-
-def swipeUp(ev):
-    if ev.type == pygame.MOUSEBUTTONDOWN:
-        pInicial = pygame.mouse.get_pos()[1]
-        while ev.type != pygame.MOUSEBUTTONUP:
-            ev = pygame.event.wait()
-        pFinal = pygame.mouse.get_pos()[1]
-        if pFinal < pInicial - 100:
-            return True
-        else:
-            return False
-    else:
-        return False
 
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
@@ -109,6 +74,41 @@ cards = [
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 1*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 4),
 	Card(cardsImage.subsurface(2*TAMANHO_CARTA_X, 0*TAMANHO_CARTA_Y, TAMANHO_CARTA_X, TAMANHO_CARTA_Y), VERDE, 4),
     ]
+
+# Event constant.
+TIMEREVENT = pygame.USEREVENT
+
+# The FPS the game runs at.
+FPS = 30
+
+# verifica se dedo esta tocando na tela
+isPressed = False
+
+# Definindo players
+class Player:
+    def __init__(self, vez):
+        self.cards = list()
+        self.myturn = vez
+
+def isInArea(mouse, card):
+    if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
+        return True
+    else:
+        return False
+
+def swipeUp(ev):
+    if ev.type == pygame.MOUSEBUTTONDOWN:
+        pInicial = pygame.mouse.get_pos()[1]
+        while ev.type != pygame.MOUSEBUTTONUP:
+            ev = pygame.event.wait()
+        pFinal = pygame.mouse.get_pos()[1]
+        if pFinal < pInicial - 100:
+            return True
+        else:
+            return False
+    else:
+        return False
+
 for i in range(4):
     for j in range(10):
         if i*10+j < 36:
@@ -134,6 +134,9 @@ def main():
     # Set the screen size.
     screen = pygame.display.set_mode((480, 800))
 
+    #Definicao de texto
+    myFont = pygame.font.Font(None, 30)
+    texto = myFont.render("pygame", 1,(255,255,0))
 
     # Map the back button to the escape key.
     if android:
@@ -147,9 +150,8 @@ def main():
     color = RED
 
     while True:
-
-
-        screen.blit(cardsImage1, (200,400))
+        screen.blit(texto, (200,300))
+        screen.blit(verso, (150,400))
         pygame.display.flip()
 
     	ev = pygame.event.wait()
@@ -193,4 +195,3 @@ def main():
 # This isn't run on Android.
 if __name__ == "__main__":
     main()
-    #J
