@@ -89,9 +89,6 @@ BUYDECK_POS = (260, 300)
 BUYDECK_WIDTH = 72 
 BUYDECK_HEIGHT = 118
 
-#imagem da carta selecionada
-selectedCard = None
-
 # Event constant.
 TIMEREVENT = pygame.USEREVENT
 
@@ -184,8 +181,11 @@ def main():
     # The color of the screen.
     #color = RED
 
-    # Inicializar o monte de descartes
+    # Inicializa o monte de descartes
     throwDeck.append(buyDeck.pop())
+
+    #imagem da carta selecionada
+    selectedCard = None
 
     while True:
         #Desenha tela
@@ -195,7 +195,6 @@ def main():
         screen.blit(miniVerso, (240, 80))
         drawPlayerCards(screen)
         drawThrowDeck(screen)
-        
         #Desenha carta selecionada
         if selectedCard != None:
             screen.blit(selectedCard, (0,0))
@@ -214,17 +213,17 @@ def main():
         #if ev.type == TIMEREVENT:
             #screen.fill(color)
 
-        # When the touchscreen is pressed, change the color to green.
+        # When the touchscreen is pressed
         elif ev.type == pygame.MOUSEBUTTONDOWN:
             compraCarta()
-#            for card in player[0].cards:
-#                if isInArea(pygame.mouse.get_pos, card.pos, TAMANHO_CARTA_X,
-#                            TAMANHO_CARTA_Y)
+            for card in player[0].cards:
+                if isInArea(pygame.mouse.get_pos(), card.pos, TAMANHO_CARTA_X,
+                            TAMANHO_CARTA_Y):
+                    selectedCard = card.image
 
-
-        # When it's released, change the color to RED.
+        # When it's released
         elif ev.type == pygame.MOUSEBUTTONUP:   
-            None
+            selectedCard = None
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
