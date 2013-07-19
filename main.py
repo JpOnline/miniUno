@@ -25,6 +25,8 @@ cardsImage = pygame.image.load("cards.jpg")
 verso = pygame.image.load("cartainv1.jpg")
 miniVerso = pygame.transform.scale(verso, (int(0.8*TAMANHO_CARTA_X),
                                    int(0.8*TAMANHO_CARTA_Y)))
+background = pygame.image.load("table.jpg")
+back = pygame.transform.scale(background, (480,800))
 
 # Color constants.
 RED = (255, 0, 0, 255)
@@ -180,13 +182,14 @@ def main():
     pygame.time.set_timer(TIMEREVENT, 1000 / FPS)
 
     # The color of the screen.
-    color = RED
+    #color = RED
 
     # Inicializar o monte de descartes
     throwDeck.append(buyDeck.pop())
 
     while True:
         #Desenha tela
+        screen.blit(back, (0, 0))
         screen.blit(texto, (285,97))
         screen.blit(verso, BUYDECK_POS)
         screen.blit(miniVerso, (240, 80))
@@ -197,7 +200,7 @@ def main():
         if selectedCard != None:
             screen.blit(selectedCard, (0,0))
         pygame.display.flip()
-
+        
         #espera por evento
     	ev = pygame.event.wait()
 
@@ -208,8 +211,8 @@ def main():
 
 
         # Draw the screen based on the timer.
-        if ev.type == TIMEREVENT:
-            screen.fill(color)
+        #if ev.type == TIMEREVENT:
+            #screen.fill(color)
 
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
@@ -236,10 +239,10 @@ def main():
 
 	if swipeUp(ev):
             print player[0].cards[0].color
-	    if color is RED:
-	        color = GREEN
-	    else:
-	        color = RED
+	    #if color is RED:
+	        #color = GREEN
+	    #else:
+	        #color = RED
 
         #Jogar carta
 	if pygame.mouse.get_pressed()[0]:
