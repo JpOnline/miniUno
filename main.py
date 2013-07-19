@@ -87,6 +87,9 @@ BUYDECK_POS = (260, 300)
 BUYDECK_WIDTH = 72 
 BUYDECK_HEIGHT = 118
 
+#imagem da carta selecionada
+selectedCard = None
+
 # Event constant.
 TIMEREVENT = pygame.USEREVENT
 
@@ -143,11 +146,9 @@ for i in xrange(len(cards)):
     buyDeck.append(cards.pop(random.randint(0,len(cards)-1)))
 
 def compraCarta():
-    if len(buyDeck) > 0:
-        if isInArea(pygame.mouse.get_pos(), BUYDECK_POS, BUYDECK_WIDTH,BUYDECK_HEIGHT):
+    if isInArea(pygame.mouse.get_pos(), BUYDECK_POS, BUYDECK_WIDTH,BUYDECK_HEIGHT):
+        if len(buyDeck) > 0:
             player[0].cards.append(buyDeck.pop())
-    else:
-        None
 
 def drawThrowDeck(screen):
     screen.blit(pygame.transform.scale(throwDeck[len(throwDeck)-1].image,
@@ -191,6 +192,10 @@ def main():
         screen.blit(miniVerso, (240, 80))
         drawPlayerCards(screen)
         drawThrowDeck(screen)
+        
+        #Desenha carta selecionada
+        if selectedCard != None:
+            screen.blit(selectedCard, (0,0))
         pygame.display.flip()
 
         #espera por evento
@@ -209,6 +214,9 @@ def main():
         # When the touchscreen is pressed, change the color to green.
         elif ev.type == pygame.MOUSEBUTTONDOWN:
             compraCarta()
+#            for card in player[0].cards:
+#                if isInArea(pygame.mouse.get_pos, card.pos, TAMANHO_CARTA_X,
+#                            TAMANHO_CARTA_Y)
 
 
         # When it's released, change the color to RED.
