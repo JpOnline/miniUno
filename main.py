@@ -159,7 +159,7 @@ def main():
         #Posicao das cartas do player
         posicaoCartas = 480/len(player[0].cards)
         for i in xrange(len(player[0].cards)):
-            player[0].cards[i].pos = (i*posicaoCartas, 100)
+            player[0].cards[i].pos = (i*posicaoCartas, 720)
             screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
         pygame.display.flip()
 
