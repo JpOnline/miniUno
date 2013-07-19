@@ -34,6 +34,9 @@ AMARELO = 1
 VERMELHO = 2
 AZUL = 3
 
+#Numero de jogadores
+NUM_PLAYERS = 2
+
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
 #Definicao de lista com todas as cartas
@@ -92,6 +95,7 @@ class Player:
         self.cards = list()
         self.myturn = vez
 
+# Retorna True se o clique do mouse esta dentro da area da carta passada
 def isInArea(mouse, card):
     if mouse[0] > card[0] and mouse[0] < card[0]+TAMANHO_CARTA_X and mouse[1] > card[1] and mouse[1] < card[1]+TAMANHO_CARTA_Y:
         return True
@@ -117,7 +121,7 @@ for i in range(4):
             cards[i*10+j].pos = (j*TAMANHO_CARTA_X, i*TAMANHO_CARTA_Y)
 
 player = list()
-for i in range (4):
+for i in range(NUM_PLAYERS):
     if i is 0:
         player.append(Player(True))
     else:
@@ -125,7 +129,7 @@ for i in range (4):
         
 
 #Funcao de distribuicao de cartas
-for i in range (2):
+for i in range(len(player)):
     for j in range(7):
         index = random.randint(0,len(cards)-1)
         player[i].cards.append(cards.pop(index))
@@ -153,7 +157,7 @@ def main():
 
     while True:
         #Desenha tela
-        screen.blit(texto, (270,80+TAMANHO_CARTA_Y/2))
+        screen.blit(texto, (285,97))
         screen.blit(verso, (150,400))
         screen.blit(pygame.transform.rotate(miniVerso,180), (240, 80))
         #Posicao das cartas do player
