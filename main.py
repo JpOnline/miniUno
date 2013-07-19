@@ -156,6 +156,11 @@ def main():
         screen.blit(texto, (400,370))
         screen.blit(verso, (150,400))
         screen.blit(pygame.transform.rotate(miniVerso,90), (380, 400))
+        #Posicao das cartas do player
+        posicaoCartas = 480/len(player[0].cards)
+        for i in xrange(len(player[0].cards)):
+            player[0].cards[i].pos = (i*posicaoCartas, 100)
+            screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
         pygame.display.flip()
 
         #espera por evento
