@@ -16,9 +16,15 @@ class Card:
         self.number = n
         self.pos = None
 
+# Constantes de tamanho de carta
+TAMANHO_CARTA_X = 44.4
+TAMANHO_CARTA_Y = 68.16
+
 # Imagem das cartas
 cardsImage = pygame.image.load("cards.jpg")
 verso = pygame.image.load("cartainv1.jpg")
+miniVerso = pygame.transform.scale(verso, (int(0.8*TAMANHO_CARTA_X),
+                                   int(0.8*TAMANHO_CARTA_Y)))
 
 # Color constants.
 RED = (255, 0, 0, 255)
@@ -27,10 +33,6 @@ VERDE = 0
 AMARELO = 1
 VERMELHO = 2
 AZUL = 3
-
-# Constantes de tamanho de carta
-TAMANHO_CARTA_X = 44.4
-TAMANHO_CARTA_Y = 68.16
 
 #Sintaxe do subsurface(xi, yi, pixelsNaHorizoltalAPartirDeXi,
 #pixelsNaVerticalAPartirDeYi)
@@ -136,7 +138,7 @@ def main():
 
     #Definicao de texto
     myFont = pygame.font.Font(None, 30)
-    texto = myFont.render("pygame", 1,(255,255,0))
+    texto = myFont.render(str(len(player[0].cards)), 1,(255,255,0))
 
     # Map the back button to the escape key.
     if android:
@@ -150,10 +152,13 @@ def main():
     color = RED
 
     while True:
-        screen.blit(texto, (200,300))
+        #Desenha tela
+        screen.blit(texto, (400,370))
         screen.blit(verso, (150,400))
+        screen.blit(pygame.transform.rotate(miniVerso,90), (380, 400))
         pygame.display.flip()
 
+        #espera por evento
     	ev = pygame.event.wait()
 
         # Android-specific:
