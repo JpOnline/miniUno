@@ -164,6 +164,12 @@ def drawPlayerCards(screen):
         player[0].cards[i].pos = (i*posicaoCartas, 720)
         screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
 
+def confereCarta(carta):
+    if throwDeck[len(throwDeck)-1].color == carta.color or throwDeck[len(throwDeck)-1].number == carta.number:
+        return True
+    else:
+        return False
+        
 def main():
     pygame.init()
 
@@ -187,7 +193,7 @@ def main():
 
     # Inicializa o monte de descartes
     throwDeck.append(buyDeck.pop())
-
+    
     #imagem da carta selecionada
     selectedCard = None
 
