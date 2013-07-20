@@ -160,6 +160,14 @@ def drawPlayerCards(screen):
         player[0].cards[i].pos = (i*posicaoCartas, 720)
         screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
 
+def selectCard(screen):
+    for i in xrange(len(player[0].cards)):
+        if isInArea(pygame.mouse.get_pos(), player[0].cards[i].pos, TAMANHO_CARTA_X,
+                    TAMANHO_CARTA_Y):
+            screen.blit(pygame.transform.scale(player[0].cards[i].image,
+                                               (int(1.7*BUYDECK_WIDTH),
+                                               int(1.7*BUYDECK_HEIGHT))), (170,460))
+
 def main():
     pygame.init()
 
@@ -187,18 +195,21 @@ def main():
     #imagem da carta selecionada
     selectedCard = None
 
+    #Desenho fundo
+    screen.blit(back, (0, 0))
+    
+    #Corta parte do fundo
+    background = back.subsurface(0, 710, 480, 90)
+
     while True:
         #Desenha tela
-        screen.blit(back, (0, 0))
+        screen.blit(background, (0, 710)) #limpa soh a parte das cartas do
+                                          #player por questao de desempenho
         screen.blit(texto, (285,97))
         screen.blit(verso, BUYDECK_POS)
         screen.blit(miniVerso, (240, 80))
         drawPlayerCards(screen)
         drawThrowDeck(screen)
-        #Desenha carta selecionada
-        if selectedCard != None:
-            screen.blit(selectedCard, (0,0))
-        pygame.display.flip()
         
         #espera por evento
     	ev = pygame.event.wait()
@@ -216,10 +227,7 @@ def main():
         # When the touchscreen is pressed
         elif ev.type == pygame.MOUSEBUTTONDOWN:
             compraCarta()
-            for card in player[0].cards:
-                if isInArea(pygame.mouse.get_pos(), card.pos, TAMANHO_CARTA_X,
-                            TAMANHO_CARTA_Y):
-                    selectedCard = card.image
+            selectCard(screen)
 
         # When it's released
         elif ev.type == pygame.MOUSEBUTTONUP:   
@@ -230,6 +238,8 @@ def main():
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
 	
+        pygame.display.flip()
+    
 	#movimenta carta com o dedo
 #        if pygame.mouse.get_pressed()[0]:
 #            for i in xrange(len(cards)-5):
