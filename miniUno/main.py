@@ -224,27 +224,22 @@ def main():
     
     #Corta parte do fundo
     background = back.subsurface(0, 710, 480, 90)
-    background2 = back.subsurface(280, 30, 40, 90)
-    #background2 = back.subsurface(280, 30, 140, 90)
+    background2 = back.subsurface(220, 30, 80, 90)
 
     #index da carta selecionada
     selectedCard = [0] 
-
-    #Verifica quando a tela foi tocada
-    clicked = False
 
     while True:
         #Desenha tela
         screen.blit(background, (0, 710)) #limpa soh a parte das cartas do
                                           #player por questao de desempenho
-        screen.blit(background2, (280, 30))
+        screen.blit(background2, (220, 30))
         screen.blit(texto, (285,97))
         screen.blit(verso, BUYDECK_POS)
         screen.blit(miniVerso, (240, 80))
         drawPlayerCards(screen)
         drawThrowDeck(screen)
         texto = myFont.render(str(len(player[1].cards)), 1,(255,255,0))
-
         
         #espera por evento
     	ev = pygame.event.wait()
@@ -260,22 +255,17 @@ def main():
             #screen.fill(color)
 
         # When the touchscreen is pressed
-        #elif ev.type == pygame.MOUSEBUTTONDOWN:
-        if pygame.mouse.get_pressed()[0] and not clicked:
-            clicked = True
-            #texto = myFont.render(str(pygame.mouse.get_pos()), 1,(255,255,0))
+        elif ev.type == pygame.MOUSEBUTTONDOWN:
             compraCarta()
             selectCard(screen, selectedCard)
             throwCard(screen, selectedCard)
+
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
 	
-        elif not pygame.mouse.get_pressed()[0]:
-            clicked = False
-
         pygame.display.flip()
     
 	#movimenta carta com o dedo
