@@ -159,10 +159,16 @@ def drawPlayerCards(screen):
     posicaoCartas = 480/len(player[0].cards)
     for i in xrange(len(player[0].cards)):
         player[0].cards[i].pos = (i*posicaoCartas, 720)
+    #Centraliza as cartas
+    pixelsADeslocar = (480 -
+                       player[0].cards[len(player[0].cards)-1].pos[0]-
+                       TAMANHO_CARTA_X)/2
+    for i in xrange(len(player[0].cards)):
+        player[0].cards[i].pos = (player[0].cards[i].pos[0]+pixelsADeslocar, 720)
         screen.blit(player[0].cards[i].image, player[0].cards[i].pos)
 
 def selectCard(screen, selectedCard):
-    if pygame.mouse.get_pos()[1] > 700: 
+    if pygame.mouse.get_pos()[1] > 721: 
         for i in xrange(len(player[0].cards)):
             if isInArea(pygame.mouse.get_pos(), player[0].cards[i].pos, TAMANHO_CARTA_X,
                         TAMANHO_CARTA_Y):
@@ -178,12 +184,9 @@ def confereCarta(carta):
         return False
 
 def throwCard(screen, selectedCard):
-    if isInArea(pygame.mouse.get_pos(),
-                (BUYDECK_POS[0]-BUYDECK_WIDTH-50,BUYDECK_POS[1]), BUYDECK_WIDTH,
-                BUYDECK_HEIGHT):
-        if confereCarta(player[0].cards[selectedCard[0]]):
-            throwDeck.append(player[0].cards.pop(selectedCard[0]))
-            outroJogadorJoga();
+    if confereCarta(player[0].cards[selectedCard[0]]):
+        throwDeck.append(player[0].cards.pop(selectedCard[0]))
+        outroJogadorJoga();
 
 def outroJogadorJoga():
     jogou = False
@@ -225,6 +228,7 @@ def main():
     #Corta parte do fundo
     background = back.subsurface(0, 710, 480, 90)
     background2 = back.subsurface(280, 30, 40, 90)
+    backgroundSelectedCard = back.subsurface(170, 460, int(1.7*BUYDECK_WIDTH), int(1.7*BUYDECK_HEIGHT))
     #background2 = back.subsurface(280, 30, 140, 90)
 
     #index da carta selecionada
@@ -233,17 +237,21 @@ def main():
     #Verifica quando a tela foi tocada
     clicked = False
 
+    #posicao inicial do dedo ao selecionar a carta
+    pos_inicial = 0
+
     while True:
         #Desenha tela
         screen.blit(background, (0, 710)) #limpa soh a parte das cartas do
                                           #player por questao de desempenho
+        #serve pra atualizar a quantidade de cartas do oponente
         screen.blit(background2, (280, 30))
+        texto = myFont.render(str(len(player[1].cards)), 1,(255,255,0))
         screen.blit(texto, (285,97))
         screen.blit(verso, BUYDECK_POS)
         screen.blit(miniVerso, (240, 80))
         drawPlayerCards(screen)
         drawThrowDeck(screen)
-        texto = myFont.render(str(len(player[1].cards)), 1,(255,255,0))
 
         
         #espera por evento
@@ -265,16 +273,23 @@ def main():
             clicked = True
             #texto = myFont.render(str(pygame.mouse.get_pos()), 1,(255,255,0))
             compraCarta()
+            pos_inicial = pygame.mouse.get_pos()[1]
+
+        elif pygame.mouse.get_pressed()[0]:
             selectCard(screen, selectedCard)
-            throwCard(screen, selectedCard)
 
         # When the user hits back, ESCAPE is sent. Handle it and end
         # the game.
         elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
             break
 	
-        elif not pygame.mouse.get_pressed()[0]:
+        #clicked se torna falso quando o dedo solta a tela
+        elif not pygame.mouse.get_pressed()[0] and clicked:
             clicked = False
+            #apaga carta selecionada
+            screen.blit(backgroundSelectedCard, (170, 460))
+            if pygame.mouse.get_pos()[1] < 721 and pos_inicial > 721:
+                throwCard(screen, selectedCard)
 
         pygame.display.flip()
     
